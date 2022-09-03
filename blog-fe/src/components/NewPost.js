@@ -5,37 +5,40 @@ import {API_URL} from "../constants";
 
 class NewPost extends React.Component {
 
-    getDate() {
-        const current= new Date();
-        const date= current.getDate();
-        const month= current.getMonth();
-        const year= current.getFullYear();
-        return date+'/'+month+'/'+year;
-    }
+    
      
     state = {
-        
-        author : "",
+       
         title : "",
         text : "",
-        created_date: this.getDate(),
-        published_date: this.getDate()
+        
     };
 
     componentDidMount() {
         if (this.props.post){
-            const { author,title,text,created_date,published_date}= this.props.post;
-            this.setState ({ author,title,text,created_date,published_date });
+            const { author,title,text }= this.props.post;
+            this.setState ({ author,title,text});
+            console.log(this.props.post.text)
         
         }
     }
-    onChange =e => {
-        TouchList.setState({ [e.target.name]: e.target.value});
+    onChange = e => {
+        this.setState({ [e.target.name]: e.target.value });
+        //console.log(e.target.name);
 
     };
     createPost = e => {
         e.preventDefault();
-        axios.post(API_URL, this.state).then(()=>{
+        const data = {
+            author: this.state.author,
+            title : this.state.title,
+            text : this.state.text,
+           
+        }
+        axios.post(API_URL, {data}).then(res =>{
+
+            console.log(res);
+            console.log(res.data);
             this.props.resetState();
             this.props.toggle();
         });
@@ -48,21 +51,14 @@ class NewPost extends React.Component {
     render(){
         return (
             <Form onSubmit={this.createPost}>
-                <FormGroup>
-                    <Label for="author">Author:</Label>
-                    <Input
-                    type= "checkbox"
-                    onChange={this.onChange}
-                    value= {this.defaultIfEmpty(this.state.author)}
-                    />
-                </FormGroup>
+                
                 <FormGroup>
                     <Label for="title">Title:</Label>
                     <Input
                         type="text"
                         name="title"
                         onChange={this.onChange}
-                        value={this.defaultIfEmpty(this.state.title)}
+                        //value={this.defaultIfEmpty(this.state.title)}
                     />
                 </FormGroup>
                 <FormGroup>
@@ -71,28 +67,12 @@ class NewPost extends React.Component {
                         type="text"
                         name="text"
                         onChange={this.onChange}
-                        value={this.defaultIfEmpty(this.state.text)}
+                        //value={this.defaultIfEmpty(this.state.text)}
                     />
                 </FormGroup>
-                <FormGroup>
-                    <Label for="created_date">Created Date:</Label>
-                    <Input
-                        type="datetime"
-                        name="created_date"
-                        readOnly
-                        value={this.getDate()}
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="published_date">Published Date:</Label>
-                    <Input
-                        type="datetime"
-                        name="published_date"
-                        readOnly
-                        value={this.getDate()}
-                    />
-                </FormGroup>
-                <Button>Send</Button>
+                
+               
+                <Button type="submit">Send</Button>
             </Form>
         );
     }

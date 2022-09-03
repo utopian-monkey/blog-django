@@ -15,7 +15,6 @@ class PostList extends Component{
                     <div>
                         <article className="post">
                         <li key={i}>
-                        <time className="time">{post.published_date}</time>
                         <h1>{post.title} </h1>
                         <p>{post.text} </p>
                         </li>
@@ -29,7 +28,7 @@ class PostList extends Component{
                     post={posts.map(post=>(post))}
                     resetState={this.props.resetState}
                 />
-                &nbsp;&nbsp;
+                
             </body>
         )
     }
